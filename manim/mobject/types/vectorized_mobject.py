@@ -649,6 +649,9 @@ class VMobject(Mobject):
         # TODO, check the len(self.points) % 4 == 0?
         self.append_points([anchor1, handle1, handle2, anchor2])
 
+    def add_cubic_bezier_curves(self, curves):
+        self.append_points(curves.flatten())
+
     def add_cubic_bezier_curve_to(
         self,
         handle1: np.ndarray,
@@ -1331,7 +1334,7 @@ class VMobject(Mobject):
         return self.points[0 :: self.n_points_per_cubic_curve]
 
     def get_end_anchors(self) -> np.ndarray:
-        """Return the starting anchors of the bezier curves.
+        """Return the end anchors of the bezier curves.
 
         Returns
         -------
@@ -1728,6 +1731,12 @@ class VGroup(VMobject, metaclass=ConvertToOpenGL):
 
     This can be used to group multiple :class:`~.VMobject` instances together
     in order to scale, move, ... them together.
+
+    Notes
+    -----
+    When adding the same mobject more than once, repetitions are ignored.
+    Use :meth:`.Mobject.copy` to create a separate copy which can then
+    be added to the group.
 
     Examples
     --------
